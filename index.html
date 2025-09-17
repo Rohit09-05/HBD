@@ -14,7 +14,8 @@
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
 <body>
-  <audio id="birthday-audio" src="music.mp3" muted loop>
+  <!-- ✅ removed muted -->
+  <audio id="birthday-audio" src="music.mp3" loop>
     Your browser does not support the audio element.
   </audio>
 
@@ -180,15 +181,17 @@
     var intervalContent;
     var intervalTitle;
 
-    // Play audio on first interaction anywhere on screen
+    // ✅ Play audio on first interaction anywhere on screen (mobile + desktop)
     function playAudioOnUserInteraction() {
       const audio = document.getElementById('birthday-audio');
       if (audio.paused) {
-        audio.muted = false;
-        audio.play().catch(error => console.log('Playback error:', error));
-        window.removeEventListener('click', playAudioOnUserInteraction);
-        window.removeEventListener('touchstart', playAudioOnUserInteraction);
+        audio.currentTime = 0;
+        audio.play().then(() => {
+          console.log("Audio playing ✅");
+        }).catch(error => console.log("Playback error:", error));
       }
+      window.removeEventListener('click', playAudioOnUserInteraction);
+      window.removeEventListener('touchstart', playAudioOnUserInteraction);
     }
 
     window.addEventListener('click', playAudioOnUserInteraction);
